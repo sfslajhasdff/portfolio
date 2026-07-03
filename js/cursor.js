@@ -119,7 +119,7 @@ const hoverElements =
 
 document.querySelectorAll(
 
-"a, .work-item, .short-card, button"
+"a, .work-item, .short-card, button, .gallery-card"
 
 );
 

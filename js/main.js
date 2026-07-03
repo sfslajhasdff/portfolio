@@ -413,100 +413,60 @@ ScrollTrigger.refresh();
 });
 
 // =====================
-// SHORTS DRAG SLIDER
+// UNIVERSAL DRAG SLIDER
 // =====================
 
+function dragSlider(selector){
 
-const shortsSlider = document.querySelector(".shorts-track");
+    const slider = document.querySelector(selector);
 
+    if(!slider) return;
 
-if(shortsSlider){
+    let isDown = false;
+    let startX = 0;
+    let scrollLeft = 0;
 
+    slider.addEventListener("mousedown",(e)=>{
 
-let isDown = false;
+        isDown = true;
 
-let startX;
+        startX = e.pageX - slider.offsetLeft;
+        scrollLeft = slider.scrollLeft;
 
-let scrollLeft;
+    });
 
+    document.addEventListener("mouseup",()=>{
 
+        isDown = false;
 
-shortsSlider.addEventListener(
-"mousedown",
-(e)=>{
+    });
 
+    slider.addEventListener("mouseleave",()=>{
 
-isDown = true;
+        isDown = false;
 
+    });
 
-startX = e.pageX - shortsSlider.offsetLeft;
+    slider.addEventListener("mousemove",(e)=>{
 
+        if(!isDown) return;
 
-scrollLeft = shortsSlider.scrollLeft;
+        e.preventDefault();
 
+        const x = e.pageX - slider.offsetLeft;
 
-});
+        const move = (x - startX) * 1.5;
 
+        slider.scrollLeft = scrollLeft - move;
 
-
-
-
-shortsSlider.addEventListener(
-"mouseleave",
-()=>{
-
-
-isDown = false;
-
-
-});
-
-
-
-
-
-shortsSlider.addEventListener(
-"mouseup",
-()=>{
-
-
-isDown = false;
-
-
-});
-
-
-
-
-
-shortsSlider.addEventListener(
-"mousemove",
-(e)=>{
-
-
-if(!isDown) return;
-
-
-e.preventDefault();
-
-
-
-const x = e.pageX - shortsSlider.offsetLeft;
-
-
-const move = (x - startX) * 1.5;
-
-
-
-shortsSlider.scrollLeft = scrollLeft - move;
-
-
-
-});
-
-
+    });
 
 }
+
+dragSlider(".shorts-track");
+dragSlider(".gallery-track");
+
+
 
 // =====================
 // ABOUT MOTION
@@ -573,6 +533,58 @@ threshold:.3
 
 aboutObserver.observe(aboutSection);
 
+// =====================
+// GALLERY DRAG FIX
+// =====================
 
+const galleryTrack = document.querySelector(".gallery-track");
+
+if (galleryTrack) {
+
+    let isDown = false;
+    let startX = 0;
+    let scrollLeft = 0;
+
+    galleryTrack.addEventListener("mousedown", (e) => {
+
+        // 이미지 드래그 방지
+        e.preventDefault();
+
+        isDown = true;
+
+        startX = e.pageX;
+        scrollLeft = galleryTrack.scrollLeft;
+
+        galleryTrack.classList.add("dragging");
+
+    });
+
+    window.addEventListener("mouseup", () => {
+
+        isDown = false;
+
+        galleryTrack.classList.remove("dragging");
+
+    });
+
+    galleryTrack.addEventListener("mouseleave", () => {
+
+        isDown = false;
+
+        galleryTrack.classList.remove("dragging");
+
+    });
+
+    window.addEventListener("mousemove", (e) => {
+
+        if (!isDown) return;
+
+        const walk = (e.pageX - startX) * 1.4;
+
+        galleryTrack.scrollLeft = scrollLeft - walk;
+
+    });
+
+}
 
 }

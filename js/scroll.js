@@ -493,3 +493,53 @@ if (galleryArea) {
     });
 
 }
+
+/* =========================
+GALLERY DRAG SLIDER
+========================= */
+
+const galleryTrack = document.querySelector(".gallery-track");
+
+if (galleryTrack) {
+
+    let isDown = false;
+    let startX;
+    let scrollLeft;
+
+    galleryTrack.addEventListener("mousedown", (e) => {
+
+        isDown = true;
+        galleryTrack.classList.add("active");
+
+        startX = e.pageX - galleryTrack.offsetLeft;
+        scrollLeft = galleryTrack.scrollLeft;
+
+    });
+
+    galleryTrack.addEventListener("mouseleave", () => {
+
+        isDown = false;
+
+    });
+
+    galleryTrack.addEventListener("mouseup", () => {
+
+        isDown = false;
+
+    });
+
+    galleryTrack.addEventListener("mousemove", (e) => {
+
+        if (!isDown) return;
+
+        e.preventDefault();
+
+        const x = e.pageX - galleryTrack.offsetLeft;
+
+        const walk = (x - startX) * 2;
+
+        galleryTrack.scrollLeft = scrollLeft - walk;
+
+    });
+
+}
